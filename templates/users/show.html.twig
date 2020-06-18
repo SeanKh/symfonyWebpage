@@ -6,6 +6,11 @@
 {% block body %}
   <h1>{{user.firstName}}</h1>
   <p>{{user.lastName}}</p>
+
+  <p>{{ user.dateOfBirth| date("Y-m-d") }}</p>
+    <p>{{ user.email }}</p>
+    <p>{{ user.dateCreated | date("Y-m-d H:i:s") }}</p>
+    <p>{{ user.dateUpdated | date("Y-m-d H:i:s") }}</p>
   <hr>
   <a href="/symphuser/public/">Go Back</a>
 {% endblock %}

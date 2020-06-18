@@ -27,6 +27,7 @@
             
             $users= $this->getDoctrine()->getRepository(User::class)->findAll();
             //return new Response('<html><body>Hello</body></html>');
+            
             return $this->render('users/index.html.twig', array
             ('users' => $users));
         }
@@ -93,19 +94,23 @@
          * Method({"GET", "POST"})
          */
         public function editUser(Request $request, $id){
-            $user = new User();
-            if($request->getMethod() == 'GET') {
-                $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+            $dbUser = $this->getDoctrine()->getRepository(User::class)->find($id);
+            if(is_null($dbUser)) {
+                return $this->redirectToRoute('not-found');
             }
-            $form = $this->createUserForm('POST', $user);
+            $form = $this->createUserForm('POST', $dbUser);
             $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid()){
                 $user=$form->getData();
-                $user->setDateUpdated(new \DateTime());
-                
+
+                $dbUser->setDateUpdated(new \DateTime());
+                $dbUser->setLastName($user->getLastName()); 
+                $dbUser->setFirstName($user->getFirstName()); 
+                $dbUser->setDateOfBirth($user->getDateOfBirth());  
+                $dbUser->setEmail($user->getEmail()); 
+
                 $entityManager=$this->getDoctrine()->getManager();
-                $entityManager->persist($user);
                 $entityManager->flush();
 
                 return $this->redirectToRoute('user-list');
@@ -121,12 +126,38 @@
          * @Route("/user/{id}", name="user-show")
          */
         public function show($id){
-            $user=$this->getDoctrine()->getRepository
-            (User::class)->find($id);
-
+            $user=$this->getDoctrine()->getRepository(User::class)->find($id);
+            if(is_null($user)) {
+                return $this->redirectToRoute('not-found');
+            }
+            
             return $this->render('users/show.html.twig',array('user'=>$user));
         }
 
+        /**
+         * @Route("/user/delete/{id}")
+         * @Method({"DELETE"})
+         */
+        public function delete(Request $request, $id) {
+            
+            $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+    
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+    
+            $response = new Response();
+            $response->send();
+        }
+
+        /**
+         * @Route("/404", name="not-found")
+         */
+        public function notFound(){
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            return $this->render('inc/404.html.twig',array(), $response);
+        }
 
         // /**
         //  * @Route("/user/save")

@@ -16,9 +16,12 @@
         {% for user in users %}
           <tr>
             <td>{{ user.lastName }}</td>
+            
+            
             <td>
               <a href="/symphuser/public/user/{{ user.id }}" class="btn btn-dark">Show</a>
-              <a href="/symphuser/public/user/edit/{{ user.id }}" class="btn btn-dark">Edit</a>
+              <a href="/symphuser/public/user/edit/{{ user.id }}" class="btn btn-light">Edit</a>
+              <a href="#" class="btn btn-danger delete-user" data-id="{{ user.id }}">Delete</a>
               </td>
           </tr>
         {% endfor %}
@@ -30,5 +33,5 @@
 {% endblock %}
 
 {% block javascripts %}
-  <script src="/js/main.js"></script>
+  <script src="/symphuser/public/js/main.js"></script>
 {% endblock %}
