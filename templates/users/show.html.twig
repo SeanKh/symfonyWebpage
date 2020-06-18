@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{user.firstName}}{% endblock %}
+
+{% block body %}
+  <h1>{{user.firstName}}</h1>
+  <p>{{user.lastName}}</p>
+  <hr>
+  <a href="/symphuser/public/">Go Back</a>
+{% endblock %}
