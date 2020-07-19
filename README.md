@@ -1,4 +1,4 @@
-# eppdata-test
+# Symfony Webpage
 ## About
 This repo shows the web form for presenting and entering user data.
 
